@@ -25,8 +25,9 @@ from django.template import RequestContext
 from django.db.models import Q
 
 from snowy.notes.templates import CONTENT_TEMPLATES, DEFAULT_CONTENT_TEMPLATE
+from snowy.accounts.models import UserProfile
 from snowy.notes.models import *
-from snowy import settings
+from django.conf import settings
 
 def note_index(request, username,
                template_name='notes/note_index.html'):
@@ -37,7 +38,7 @@ def note_index(request, username,
                                 .order_by('-user_modified')
     if last_modified.count() > 0:
         return HttpResponseRedirect(last_modified[0].get_absolute_url())
-    
+
     # TODO: Instruction page to tell user to either sync or create a new note
     return render_to_response(template_name,
                               {'author': author,
@@ -54,7 +55,7 @@ def note_list(request, username,
                               {'notes': notes},
                               context_instance=RequestContext(request))
 
-def note_detail(request, username, note_id, slug='',
+def note_detail(request, username, note_id, slug='', delete='',
                 template_name='notes/note_detail.html'):
     def clean_content(xml, author):
         """
@@ -74,28 +75,42 @@ def note_detail(request, username, note_id, slug='',
                 continue
 
             link.setAttribute("id", str(note.pk))
-        
+
         return doc.toxml()
 
     author = get_object_or_404(User, username=username)
     note = get_object_or_404(Note, pk=note_id, author=author)
+    profile = get_object_or_404(UserProfile, user=author)
 
     if request.user != author and note.permissions == 0:
         return HttpResponseForbidden()
-        
+
     if note.slug != slug:
         return HttpResponseRedirect(note.get_absolute_url())
-    
+
+    # TODO: Add a form field and check it before posting this
+    # TODO: Return an error of some sort on save fail
+    if request.method == "POST":
+        try:
+            note.delete()
+            # Increment the sync revision
+            profile.latest_sync_rev += 1
+            profile.save()
+        except (DatabaseError, IntegrityError):
+            pass
+
+        return HttpResponseRedirect(reverse("note_index", args=(username,) ) )
+
     # break this out into a function
     import libxslt
     import libxml2
-    
+
     style, doc, result = None, None, None
- 
+
     try:
         styledoc = libxml2.parseFile('data/note2xhtml.xsl')
         style = libxslt.parseStylesheetDoc(styledoc)
-    
+
         template = CONTENT_TEMPLATES.get(note.content_version, DEFAULT_CONTENT_TEMPLATE)
         complete_xml = template.replace('%%%CONTENT%%%', note.content.encode('UTF-8'))
         doc = libxml2.parseDoc(clean_content(complete_xml, author).encode('UTF-8'))
@@ -112,7 +127,8 @@ def note_detail(request, username, note_id, slug='',
         if result != None: result.freeDoc()
 
     return render_to_response(template_name,
-                              {'title': note.title,
+                              {'delete': delete,
+                               'title': note.title,
                                'note': note, 'body': body,
                                'request': request, 'author': author},
                               context_instance=RequestContext(request))

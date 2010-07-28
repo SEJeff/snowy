@@ -4,9 +4,53 @@
 {% load notes %}
 
 {% block extra_head %}
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/jquery-ui-1.7.3.custom.css" media="screen">
     <script type="text/javascript" src="{{ MEDIA_URL }}js/DUI.js" charset="utf-8"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-ui.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/ui/ui.core.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/ui/ui.dialog.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/ui/effects.explode.js" charset="utf-8"></script>
+<script>
+$(document).ready(function() {
+    var options = {};
+    var timeout = 250;
+    var $dialog = $('<div></div>')
+        .html('Are you sure you want to delete <strong>{{ note.title }}</strong>?')
+        .dialog({
+            autoOpen: false,
+            title: 'Please Confirm',
+            modal: true,
+                        buttons: {
+                'Delete Note': runeffect,
+                Cancel: function() {
+                    $(this).dialog('close');
+                }
+                                 }
+        });
+    function runeffect() {
+            // There is a better way to do this with callbacks
+            $(this).dialog('close');
+            $("#note").effect("explode", options, timeout, function() {
+                $("#delete_form").submit();
+              }
+            );
+    }
+
+    $('#opener').click(function() {
+        $dialog.dialog('open');
+        // prevent the default action, e.g., following a link
+        return false;
+    });
+
+{# Bring up the deletion dialog when hitting the note url with /delete #}
+{% if delete %}
+$dialog.dialog('open');
+{% endif %}
+});
+</script>
 {# Disable funcooker for now #}
 {% comment %}
+#}
     <script type="text/javascript" src="{{ MEDIA_URL }}js/funcooker.js" charset="utf-8"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.scrollfollow.js" charset="utf-8"></script>
 {% endcomment %}
@@ -51,10 +95,17 @@
 {% endblock %}
 
 {% block content %}
+<div id="delete_div" style="visibility: hidden;">
+    <form id="delete_form" method="POST" action="{% url note_delete author.username note.id note.slug "delete" %}">
+    <input type="submit" />
+    </form>
+</div>
 <table id="content-layout" cellspacing="0" cellpadding="0">
     <tr>
         <td id="note">
-            <h1>{{ title|safe }}</h1>
+        <div><h1>{{ title|safe }}</h1>
+            <div style="float: right;"><img id="opener" style="cursor: pointer;" src="{{ MEDIA_URL }}img/accounts/delete-account.png" alt="Delete this note" title="Delete this note"></div>
+        </div>
             <div id="funcooker">
                 {{ body|safe }}
             </div>
@@ -82,7 +133,7 @@
                 <p><a href="#">Decrease Indent</a></p>
                 <h3>Actions</h3>
                 <p><a href="#">Link</a></p>
-                <p><a href="#">Delete</a></p>
+                <p><a href="{% url note_delete author.username note.id note.slug  %}">Delete</a></p>
                 <p><a href="#">History</a></p>
                 <p><a href="#">Sharing</a></p>
             </div>

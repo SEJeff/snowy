@@ -26,7 +26,7 @@ from snowy.notes.managers import NoteManager
 
 class Note(models.Model):
     NOTE_PERMISSIONS = (
-        (0, _(u'Private')), (1, _(u'Public')), 
+        (0, _(u'Private')), (1, _(u'Public')),
     )
 
     guid = models.CharField(max_length=36)
@@ -49,7 +49,7 @@ class Note(models.Model):
 
     open_on_startup = models.BooleanField(default=False)
     pinned = models.BooleanField(default=False)
-    
+
     last_sync_rev = models.IntegerField(default=-1)
 
     objects = NoteManager()
