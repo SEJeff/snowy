@@ -90,7 +90,7 @@ class NoteTag(models.Model):
     def _note_is_public(self):
         # This will need to be expanded once a more
         # fine-grained permissions system is in place.
-        if filter(lambda note: note.permissions, self.note_set.all() ):
+        if self.note_set.filter(permissions__gt=0).count():
             return True
         else:
             return False
