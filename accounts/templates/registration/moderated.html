@@ -14,7 +14,9 @@ p.center {
 {% endblock %}
 {% block content %}
 <h1>{% trans "Sorry" %} {{ user.username }}!</h1>
-<p class="center"><img src="{{ MEDIA_URL }}/img/face-sad.png" alt=""></p>
-<p class="center">{{ site.name }} is not available outside of private alpha currently.</p>
-<p class="center">We will send an email to {{ user.email }} when our open beta begins.</p>
+{% blocktrans with site.name as site_name and MEDIA_URL as media and user.email as email %}
+<p class="center"><img src="{{ media }}/img/face-sad.png" alt=""></p>
+<p class="center">{{ site_name }} is not available outside of private alpha currently.</p>
+<p class="center">We will send an email to {{ email }} when our open beta begins.</p>
+{% endblocktrans %}
 {% endblock %}
