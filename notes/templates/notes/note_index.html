@@ -26,7 +26,7 @@
         <li id="new-note"><a href="#">New Note...</a></li>
 {% endcomment %}
     </ul>
-{% endif %}
+    {% endif %}
 </div>
 <div id="sidebar-notebook-list">
 {% if enabled %}
@@ -64,6 +64,6 @@
 </table>
 {% else %}
 <h1>Notice</h1>
-{{ author }}'s account is currently disabled
+{{ author }}'s account is currently disabled.
 {% endif %}
 {% endblock %}

@@ -71,7 +71,7 @@ def openid_registration(request, template_name='registration/registration_form.h
                     return HttpResponseNotAllowed(_(u'Disabled account'))
                 else:
                     return render_to_response("registration/moderated.html", {'user': user,},
-                                             context_instance=RequestContext(request))
+                                              context_instance=RequestContext(request))
         else:
             return HttpResponseNotAllowed(_(u'Unknown user'))
 
