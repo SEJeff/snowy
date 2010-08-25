@@ -17,6 +17,7 @@
 
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
+from django.utils.translation import ugettext_lazy as _
 from django.contrib import admin
 
 class ExtendedUserAdmin(UserAdmin):
@@ -36,7 +37,8 @@ class ExtendedUserAdmin(UserAdmin):
             action = "enabled"
         else:
             action = "disabled"
-        self.message_user(request, "%s sucessfully %s" % (msg, action))
+        # Django's built-in messaging requires basestring-like objects in 1.1
+        self.message_user(request, unicode(_("%s successfully %s" % (msg, action))))
 
     def batch_user_enable(self, request, queryset):
         self._batch_user_modify(request, queryset, enable=True)
@@ -44,8 +46,8 @@ class ExtendedUserAdmin(UserAdmin):
     def batch_user_disable(self, request, queryset):
         self._batch_user_modify(request, queryset, enable=False)
 
-    batch_user_enable.short_description  = "Enable selected users"
-    batch_user_disable.short_description = "Disable selected users"
+    batch_user_enable.short_description  = _("Enable selected users")
+    batch_user_disable.short_description = _("Disable selected users")
 
 admin.site.unregister(User)
 admin.site.register(User, ExtendedUserAdmin)
