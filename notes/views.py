@@ -115,8 +115,16 @@ def note_detail(request, username, note_id, slug='',
         if doc != None: doc.freeDoc()
         if result != None: result.freeDoc()
 
+    try:
+        notebook = note.tags.get(is_notebook=True)
+        if notebook:
+            # Remove tags such as 'system:notebook' without hardcoding
+            notebook = ''.join(notebook.name.split(':')[2:])
+    except ObjectDoesNotExist:
+        notebook = []
+
     return render_to_response(template_name,
-                              {'title': note.title,
-                               'note': note, 'body': body,
+                              {'title': note.title,  'note': note,
+                               'notebook': notebook, 'body': body,
                                'request': request, 'author': author},
                               context_instance=RequestContext(request))
