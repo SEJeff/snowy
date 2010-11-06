@@ -1,22 +1,18 @@
 table.filter_table {
 	border-width: thin;
-	border-spacing: 2px;
-	border-style: none;
-	border-color: #6CB8E9;
+	border-style: outset;
+	border-color: #FFFFFF;
 	border-collapse: collapse;
 }
 table.filter_table th {
-	border-width: 1px;
 	padding-top: 5px;
 	padding-bottom: 5px;
-	border-style: outset;
-	border-color: #6CB8E9;
+	border-style: none;
 	background-color: #fff;
 }
 table.filter_table td {
-	border-width: 1px;
 	padding: 4px;
-	border-style: outset;
+	border-style: none;
 	border-color: #6CB8E9;
 }
 table.filter_table tbody tr td {
