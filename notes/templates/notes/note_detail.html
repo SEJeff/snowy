@@ -15,6 +15,26 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}js/uitablefilter-setup.js"></script>
 
 <script type="text/javascript" src="{{ MEDIA_URL}}js/jquery.uitablefilter.js"></script></head><body>
+<script type="text/javascript">
+ var share_button = $('#share_button,:button');
+
+ $(document).ready(function() {
+     var popup = $('#sharing_container');
+     $('#share_button').click(function() {
+       if (popup.hasClass("hidden") == true) {
+         popup.removeClass("hidden");
+         // Focus the input for usability
+         $('#filter').focus();
+         // Hide the invite new user link by default
+         $('#invite').hide();
+       }
+       else {
+         popup.addClass("hidden");
+       };
+     });
+ });
+
+</script>
 
 {% endblock %}
 
@@ -58,23 +78,28 @@
 
 <!-- TODO: Make this a floating div -->
 <button id="share_button">Share this note</button>
-<div id="sharing_container" style="width: 30%;">
- <form id="filter-form"><input name="filter" id="filter" value="" maxlength="30" size="30" type="text" style="width: 100%;"></form> 
- <table class="filter_table" style="width: 100%;">
+<div id="sharing_container" style="width: 30%; position:relative; top:-50; left:5; z-index:4" class="hidden">
+ <form id="filter-form"><input name="filter" id="filter" maxlength="50" size="30" type="text" style="width: 100%;"></form> 
+ <table id="filter_table" class="filter_table" style="width: 100%;">
+ <thead><tr id="invite"><th><a href="#">Invite by email</a></th></tr></thead>
 <!--
- <thead><tr><th>Share</th><th>Email</th></tr></thead>
+ <thead><tr><th id="invite"><a href="#">Invite by email</a></th></tr></thead>
 -->
+
   <tbody><tr style="display: table-row;"></tr>
-   <tr><td style="text-align: center;"><input type="checkbox"></input></td><td>Share with all users (public)</td></tr>
-   <tr><td style="text-align: center;"><input type="checkbox" checked></input></td><td>jeffschroeder@computer.org</td></tr>
-   <tr><td style="text-align: center;"><input type="checkbox"></input></td><td>sanfordarmstrong@gmail.com</td></tr>
-   <tr><td style="text-align: center;"><input type="checkbox"></input></td><td>nekohayo@gmail.com</td></tr>
-   <tr><td style="text-align: center;"><input type="checkbox"></input></td><td>pcutler@gnome.org</td></tr>
-   <tr><td style="text-align: center;"><input type="checkbox"></input></td><td>btaylor@gnome.org</td></tr>
-  </tbody></table><br><br>
+   <tr><td class="center"><input type="checkbox"></input></td><td>Make this note public</td></tr>
+   <tr><td colspan="2">Share with these users</td></tr>
+   <tr><td class="center"><input type="checkbox" checked></input></td><td>jeffschroeder@computer.org</td></tr>
+   <tr><td class="center"><input type="checkbox"></input></td><td>sanfordarmstrong@gmail.com</td></tr>
+   <tr><td class="center"><input type="checkbox"></input></td><td>nekohayo@gmail.com</td></tr>
+   <tr><td class="center"><input type="checkbox"></input></td><td>pcutler@gnome.org</td></tr>
+   <tr><td class="center"><input type="checkbox"></input></td><td>btaylor@gnome.org</td></tr>
+  <!--
+   <tr><td colspan="2" id="invite" class="center"><a href="#">Invite by email</a></td></tr>
+  -->
+  </tbody></table>
  </form>
 </div>
-
 
 <table id="content-layout" cellspacing="0" cellpadding="0">
     <tr>
