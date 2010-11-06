@@ -7,19 +7,15 @@ table.filter_table {
 }
 table.filter_table th {
 	border-width: 1px;
-	padding-right: 10px;
-	padding-left: 10px;
 	padding-top: 5px;
 	padding-bottom: 5px;
 	border-style: outset;
 	border-color: #6CB8E9;
-    background-color: #fff;
+	background-color: #fff;
 }
 table.filter_table td {
 	border-width: 1px;
 	padding: 4px;
-	padding-left: 8px;
-	padding-right: 8px;
 	border-style: outset;
 	border-color: #6CB8E9;
 }
@@ -44,15 +40,12 @@ table.filter_table_targets {
 table.filter_table_targets th {
 	border-width: 1px;
 	padding-right: 10px;
-	padding-left: 10px;
-	padding-top: 5px;
 	padding-bottom: 5px;
 	border-style: outset;
 	border-color: #6CB8E9;
 }
 table.filter_table_targets td {
 	border-width: 1px;
-	padding: 10px;
 	border-style: outset;
 	border-color: #6CB8E9;
 }
