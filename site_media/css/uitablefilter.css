@@ -1,3 +1,9 @@
+.popup {
+	width: 30%;
+	position: absolute;
+	z-index: 1;
+}
+
 table.filter_table {
 	border-width: thin;
 	border-style: outset;

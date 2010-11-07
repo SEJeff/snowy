@@ -17,19 +17,16 @@
 <script type="text/javascript" src="{{ MEDIA_URL}}js/jquery.uitablefilter.js"></script></head><body>
 <script type="text/javascript">
  $(document).ready(function() {
+     // Hide the invite new user link by default
+     $('#invite').hide();
+
      var popup = $('#sharing_container');
+
      $('#share_button').click(function() {
        if (popup.hasClass("hidden") == true) {
-         // TODO: This moves the note down the height of the input box
-         //       the very first time that you click share this  note.
          popup.removeClass("hidden");
-         popup.css('top', popup.offset().top);
-         popup.css('left', popup.offset().left);
-         popup.css('position', 'absolute');
          // Focus the input for usability
          $('#filter').focus();
-         // Hide the invite new user link by default
-         $('#invite').hide();
        }
        else {
          popup.addClass("hidden");
@@ -69,7 +66,7 @@
 </div>
 <div id="sidebar-notebook-list">
     <h3>{% trans "Notebooks" %}</h3>
-    <ul> 
+    <ul>
 {% user_notebook_list request author as all_notebooks %}
 {% include "notes/notebook_list_snippet.html" %}
         <li class="more-item"><a href="#">{% trans "More Notebooks..." %}</a></li>
@@ -81,8 +78,8 @@
 
 <!-- TODO: Make this a floating div -->
 <button id="share_button">Share this note</button>
-<div id="sharing_container" style="width: 30%; position:relative; top:-50; left:5; z-index: 4;" class="hidden">
- <form id="filter-form"><input name="filter" id="filter" maxlength="50" size="30" type="text" style="width: 100%;"></form> 
+<div id="sharing_container" class="hidden popup">
+ <form id="filter-form"><input name="filter" id="filter" maxlength="50" size="30" type="text" style="width: 100%;"></form>
  <table id="filter_table" class="filter_table" style="width: 100%;">
  <thead><tr id="invite"><th><a href="#">Invite<span id="replace_email"></span> by email</a></th></tr></thead>
   <tbody><tr style="display: table-row;"></tr>
