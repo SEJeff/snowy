@@ -13,6 +13,10 @@ $(function() {
     } else {
       $('#invite').hide();
     }
+    if ( $('#invite').filter(':visible').length > 0) {
+      // Make the invitation link shiney
+      $('#replace_email').html(' ' + $('#filter').val() );
+    }
   })
 
   $('#filter-form').submit(function(){
