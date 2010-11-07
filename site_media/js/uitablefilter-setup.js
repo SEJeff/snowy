@@ -10,8 +10,7 @@ $(function() {
     // Only show the invitation link when no table body rows are left
     if ( $($("#filter_table tbody").attr('rows')).filter(':visible').length == 0 ) {
       $('#invite').show()
-    }
-    else {
+    } else {
       $('#invite').hide();
     }
   })
