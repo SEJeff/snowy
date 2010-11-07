@@ -103,8 +103,8 @@ class NoteTag(models.Model):
     is_public = property(_note_is_public)
 
 class Share(models.Model):
-    person_sharing = models.ForeignKey(User)
-    person_rcvx    = models.ForeignKey(User)
+    person_sharing = models.ForeignKey(User, related_name='person_sharing')
+    person_rcvx    = models.ForeignKey(User, related_name='person_rcvx')
     created = models.DateTimeField(auto_now_add=True)
     note = models.ForeignKey(Note)
 
