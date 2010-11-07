@@ -19,5 +19,5 @@ $(function() {
   $('#filter-form').submit(function(){
     theTable.find("tbody > tr:visible > td:eq(1)").mousedown();
     return false;
-  }).focus(); //Give focus to input field
+  });
 });
