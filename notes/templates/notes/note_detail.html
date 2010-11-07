@@ -20,7 +20,12 @@
      var popup = $('#sharing_container');
      $('#share_button').click(function() {
        if (popup.hasClass("hidden") == true) {
+         // TODO: This moves the note down the height of the input box
+         //       the very first time that you click share this  note.
          popup.removeClass("hidden");
+         popup.css('top', popup.offset().top);
+         popup.css('left', popup.offset().left);
+         popup.css('position', 'absolute');
          // Focus the input for usability
          $('#filter').focus();
          // Hide the invite new user link by default
@@ -88,7 +93,8 @@
    <tr><td class="center"><input type="checkbox"></input></td><td>nekohayo@gmail.com</td></tr>
    <tr><td class="center"><input type="checkbox"></input></td><td>pcutler@gnome.org</td></tr>
    <tr><td class="center"><input type="checkbox"></input></td><td>btaylor@gnome.org</td></tr>
-  </tbody></table>
+  </tbody>
+ </table>
  </form>
 </div>
 
