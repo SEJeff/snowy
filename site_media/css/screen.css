@@ -386,3 +386,7 @@ table.input-form {
 .center {
     text-align: center;
 }
+
+.hidden {
+	display: none;
+}

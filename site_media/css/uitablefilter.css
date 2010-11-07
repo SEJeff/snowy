@@ -54,7 +54,3 @@ table.filter_table_targets td {
 table.filter_table_targets td.highlighted {
       background-color: #4CA1D8;
  }
-
-.hidden {
-	display: none;
-}
