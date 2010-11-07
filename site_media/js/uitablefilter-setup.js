@@ -7,9 +7,9 @@ $(function() {
 
   $("#filter").keyup(function() {
     $.uiTableFilter( theTable, this.value );
-    // Figure out how to show the invite row then
-    if ( $($("#filter_table").attr('rows')).filter(':visible').length == 0 ) {
-      $('#invite').show();
+    // Only show the invitation link when no table body rows are left
+    if ( $($("#filter_table tbody").attr('rows')).filter(':visible').length == 0 ) {
+      $('#invite').show()
     }
     else {
       $('#invite').hide();
