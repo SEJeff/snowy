@@ -1,5 +1,5 @@
 $(function() {
-  var theTable = $('table.filter_table')
+  var theTable = $('table.filter_table');
 
   theTable.find("tbody > tr").find("td:eq(1)").mousedown(function(){
     $(this).prev().find(":checkbox").click()
