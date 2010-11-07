@@ -102,6 +102,18 @@ class NoteTag(models.Model):
 
     is_public = property(_note_is_public)
 
+class Share(models.Model):
+    person_sharing = models.ForeignKey(User)
+    person_rcvx    = models.ForeignKey(User)
+    created = models.DateTimeField(auto_now_add=True)
+    note = models.ForeignKey(Note)
+
+    # Same as in Note.guid
+    token = models.CharField(max_length=36)
+    # TODO: ModelMethod to see if Share is expired after settings.EXPIRE_SHARES_DAYS
+
+
+
 def _update_is_notebook(sender, instance, **kwargs):
     """
     Update is_notebook based upon the NoteTag name.
