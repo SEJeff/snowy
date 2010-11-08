@@ -17,10 +17,25 @@
 
 from django.conf.urls.defaults import *
 from snowy.notes.models import Note
+from snowy.notes.handlers import ShareHandler
+
+from piston.resource import Resource
+from piston.authentication import OAuthAuthentication
+from snowy.api.pistonextensions import SessionAuthentication
+
+sessionauth = SessionAuthentication()
+authoauth = OAuthAuthentication(realm='Snowy')
+AUTHENTICATORS = [authoauth, sessionauth]
+ad = {'authentication': AUTHENTICATORS}
+
+note_share_handler = Resource(handler=ShareHandler, **ad)
 
 urlpatterns = patterns('',
     url(r'^$', 'snowy.notes.views.note_index', name='note_index'),
     url(r'^list/$', 'snowy.notes.views.note_list', name='note_list'),
+    url(r'^(?P<note_id>\d+)/(?P<slug>[^/]+)/sharing/$', note_share_handler, name='note_share'),
+    url(r'^(?P<note_id>\d+)/sharing/$', note_share_handler, name='note_share_no_slug'),
+
     url(r'^(?P<note_id>\d+)/$', 'snowy.notes.views.note_detail', name='note_detail_no_slug'),
     url(r'^(?P<note_id>\d+)/(?P<slug>[^/]+)/$', 'snowy.notes.views.note_detail', name='note_detail'),
 )
