@@ -150,6 +150,9 @@ INSTALLED_APPS = [
 # Maximum number of notes to show on the notes_detail list.
 SNOWY_LIST_MAX_NOTES = 18
 
+# Time a sharing request is valid before expiring (in days)
+SNOWY_INVITE_EXPIRATION = 30
+
 ACCOUNT_ACTIVATION_DAYS = 15
 
 AUTH_PROFILE_MODULE = 'accounts.UserProfile'

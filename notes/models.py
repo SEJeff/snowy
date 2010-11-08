@@ -15,13 +15,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import datetime
 from django.utils.translation import ugettext_lazy as _
 from django.db.models.signals import pre_save
 from django.contrib.auth.models import User
 from django.db import models
+from django.conf import settings
 
 from autoslug.fields import AutoSlugField
 
+from snowy.core.utils import create_uuid
 from snowy.notes.managers import NoteManager
 
 class Note(models.Model):
@@ -104,15 +107,37 @@ class NoteTag(models.Model):
 
 class Share(models.Model):
     person_sharing = models.ForeignKey(User, related_name='person_sharing')
-    person_rcvx    = models.ForeignKey(User, related_name='person_rcvx')
+    person_rcvx    = models.ForeignKey(User, related_name='person_rcvx', blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     note = models.ForeignKey(Note)
+    notified = models.BooleanField(default=False, help_text="Notification sent to the person to share with")
 
     # Same as in Note.guid
-    token = models.CharField(max_length=36)
-    # TODO: ModelMethod to see if Share is expired after settings.EXPIRE_SHARES_DAYS
+    token = models.CharField(max_length=36, default=create_uuid)
 
+    def is_expired(self):
+        """
+	Find out if a Share is expired
+	"""
+        days = (datetime.datetime.now() - self.created).days
+        if days > getattr(settings, "SNOWY_INVITE_EXPIRATION", 30):
+	    return True
+	else:
+	    return False
 
+    def is_active(self):
+        """
+	Funky logic to see if a receiving person has created a user
+	"""
+        return not self.person_rcvx is None
+
+    def __unicode__(self):
+        message = "%s sharing: '%s" % (self.person_sharing.username, self.note.title)
+	if self.person_rcvx:
+	    message += "' with %s" % self.person_rcvx
+	else:
+	    message += "'"
+	return message
 
 def _update_is_notebook(sender, instance, **kwargs):
     """
@@ -122,4 +147,3 @@ def _update_is_notebook(sender, instance, **kwargs):
 
 pre_save.connect(_update_is_notebook, sender=NoteTag,
                  dispatch_uid='snowy.notes.models.NoteTag')
-
