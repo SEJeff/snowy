@@ -106,12 +106,11 @@ class NoteTag(models.Model):
     is_public = property(_note_is_public)
 
 class Share(models.Model):
-    person_sharing = models.ForeignKey(User, related_name='person_sharing')
-    person_rcvx    = models.ForeignKey(User, related_name='person_rcvx', blank=True, null=True)
+    person_sharing = models.ForeignKey(User, related_name='requestor')
+    person_rcvx    = models.ForeignKey(User, related_name='receiver', blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     note = models.ForeignKey(Note)
-    notified = models.BooleanField(default=False, help_text="Notification sent to the person to share with")
-
+    notified = models.BooleanField(default=False, help_text="notification sent")
     # Same as in Note.guid
     token = models.CharField(max_length=36, default=create_uuid)
 
