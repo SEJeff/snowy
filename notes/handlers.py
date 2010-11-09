@@ -58,6 +58,8 @@ class ShareHandler(BaseHandler):
         else:
             share_users = []
 
+	# TODO: shared_with is users that have a 2 way agreed upon sharing relationship
+	# TODO: Add in support for 'in-progress' sharing requests
         return {
             'title': note.title,
             'shared_with': share_users,
