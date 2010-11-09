@@ -40,7 +40,7 @@ except ImportError:
 # http://domain/user/notes/id/sharing
 # http://domain/user/notes/id/slug/sharing
 class ShareHandler(BaseHandler):
-    allowed_methods = ('GET', 'PUT')
+    allowed_methods = ('GET', 'PUT', 'POST')
     model = Share
 
     def read(self, request, username, note_id, slug=None):
@@ -50,25 +50,36 @@ class ShareHandler(BaseHandler):
             return rc.FORBIDDEN
 
         share_users = []
-	share_emails = []
+        share_emails = []
         shares = Share.objects.filter(person_sharing=author, note=note)
         if shares:
             for s in shares:
                 username = getattr(s.person_rcvx, 'username', None)
-		if username:
+                if username:
                     share_users.append(username)
-		else:
+                else:
                     email = getattr(s, 'email', '_BOGUS@EMAIL_')
-		    share_emails.append(email)
+                    share_emails.append(email)
         else:
             share_users = []
 
-	# TODO: shared_with is users that have a 2 way agreed upon sharing relationship
-	# TODO: Add in support for 'in-progress' sharing requests
+        # TODO: shared_with is users that have a 2 way agreed upon sharing relationship
+        # TODO: Add in support for 'in-progress' sharing requests
         return {
             'shared_with': share_users,
             'invitations': share_emails,
         }
 
     def create(self, request, username, note_id, slug=None):
-        pass
+        # TODO: Check the security of this fully
+        data = request.POST
+        attrs = self.flatten_dict(data)
+        # TODO: Fail on invalid note ids
+        note = Note.objects.get(pk=note_id)
+        # TODO: Wrap in try/except
+        (model, ret) = self.model.objects.get_or_create(email=attrs['email'], person_sharing=request.user, note=note)
+        #pdb.set_trace()
+        # TODO: Check the return of this call and return the rc.WHATEVER thingy
+        if ret:
+            model.save()
+        #pdb.set_trace()

@@ -16,7 +16,7 @@
 #
 
 from snowy.accounts.models import UserProfile
-from snowy.notes.models import Note, NoteTag
+from snowy.notes.models import Note, NoteTag, Share
 #from reversion.admin import VersionAdmin
 from django.contrib import admin
 
@@ -29,3 +29,4 @@ class NoteAdmin(admin.ModelAdmin):
 admin.site.register(Note, NoteAdmin)
 admin.site.register(NoteTag)
 admin.site.register(UserProfile)
+admin.site.register(Share)

@@ -110,7 +110,7 @@ class Share(models.Model):
     person_rcvx    = models.ForeignKey(User, related_name='receiver', blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     note = models.ForeignKey(Note)
-    notified = models.BooleanField(default=False, help_text=_('user notified'))
+    notified = models.BooleanField(default=False)
     # Same as in Note.guid
     token = models.CharField(max_length=36, default=create_uuid)
     # Necessary before an account is created and person_rcvx=None
@@ -146,9 +146,9 @@ class Share(models.Model):
     def __unicode__(self):
         message = "%s sharing: '%s" % (self.person_sharing.username, self.note.title)
         if self.person_rcvx:
-            message += "' with %s" % self.person_rcvx
+            message += "' with user %s" % self.person_rcvx
         else:
-            message += "'"
+            message += "' with email %s" % self.email
         return message
 
 def _update_is_notebook(sender, instance, **kwargs):
