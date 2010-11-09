@@ -19,9 +19,6 @@ $(function() {
     if ( invite.filter(':visible').length > 0) {
       $('#replace_email').html(' ' + $(this).val() );
     }
-    if ($(this).val().length >= $(this).attr("maxlength") ) {
-      invite.html('MAKE YOUR SHIT SHORTER!');
-    }
   });
 
   $('#filter-form').submit(function(){

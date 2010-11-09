@@ -44,6 +44,7 @@ class ShareHandler(BaseHandler):
     model = Share
 
     def read(self, request, username, note_id, slug=None):
+        """When $.getJSON() is called via jQuery"""
         author = User.objects.get(username=username)
         note = Note.objects.get(pk=note_id, author=author)
         if request.user != author and note.permissions == 0:
@@ -71,15 +72,21 @@ class ShareHandler(BaseHandler):
         }
 
     def create(self, request, username, note_id, slug=None):
-        # TODO: Check the security of this fully
+        """When $.post() is called via jQuery"""
         data = request.POST
         attrs = self.flatten_dict(data)
-        # TODO: Fail on invalid note ids
-        note = Note.objects.get(pk=note_id)
-        # TODO: Wrap in try/except
-        (model, ret) = self.model.objects.get_or_create(email=attrs['email'], person_sharing=request.user, note=note)
-        #pdb.set_trace()
-        # TODO: Check the return of this call and return the rc.WHATEVER thingy
-        if ret:
+        try:
+            # TODO: Check the security of this fully
+            note = Note.objects.get(pk=note_id)
+        except self.model.DoesNotExist:
+            return rc.NOT_FOUND
+        try:
+            (model, new) = self.model.objects.get_or_create(email=attrs['email'], person_sharing=request.user, note=note)
+        except:
+            return rc.BAD_REQUEST
+        if new:
             model.save()
-        #pdb.set_trace()
+            ret = rc.CREATED
+        else:
+            ret = rc.DUPLICATE_ENTRY
+        return ret

@@ -21,6 +21,7 @@
      $('#invite').hide();
      var input = $('#filter');
      var popup = $('#sharing_container');
+     // The current url + /sharing
      var url   = "{% url note_share_no_slug note.author note.id %}";
 
      $('#share_button').click(function() {
@@ -38,8 +39,11 @@
 	 //alert("Email: " + email);
 	 $.post(url, {email: email},
 	     function(data) {
-	     popup.addClass("hidden");
-	     //alert("Returned: " + data);
+		 // Hide and reset the input
+	         popup.addClass("hidden");
+	         input.val('');
+	         alert("Returned: " + data);
+		 return false;
 	     }
 	 );
      });
@@ -111,7 +115,7 @@
  <table id="filter_table" class="filter_table fullwidth">
  <thead><tr id="invite"><th><a href="#" id="invite_link">Invite<span id="replace_email"></span> by email</a></th></tr></thead>
   <tbody><tr style="display: table-row;"></tr>
-   <tr><td class="center"><input type="checkbox"></input></td><td>Make this note public</td></tr>
+   <tr><td class="center"><input id="public" type="checkbox"></input></td><td>Make this note public</td></tr>
    <!--
    <tr><td colspan="2">Share with these users</td></tr>
    -->
