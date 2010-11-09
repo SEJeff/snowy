@@ -72,15 +72,25 @@ class ShareHandler(BaseHandler):
         }
 
     def create(self, request, username, note_id, slug=None):
-        """When $.post() is called via jQuery"""
-        data = request.POST
+        """
+        When $.post() is called via jQuery. Unfortunately, HTTP PUT
+        is not well supported by some browsers and many clients  so
+        we   overload   POST   to  also  update  checkbox  changes.
+        """
+        import pdb
+        data  = request.POST
         attrs = self.flatten_dict(data)
+        user  = request.user
         try:
-            # TODO: Check the security of this fully
             note = Note.objects.get(pk=note_id)
+            # Sharing privileges are only for note authors
+            if note.author != user:
+                return rc.FORBIDDEN
         except self.model.DoesNotExist:
             return rc.NOT_FOUND
+        pdb.set_trace()
         try:
+            # TODO: Add explicit exception handling
             (model, new) = self.model.objects.get_or_create(email=attrs['email'], person_sharing=request.user, note=note)
         except:
             return rc.BAD_REQUEST
@@ -88,5 +98,5 @@ class ShareHandler(BaseHandler):
             model.save()
             ret = rc.CREATED
         else:
-            ret = rc.DUPLICATE_ENTRY
+            ret = rc.ALL_OK
         return ret

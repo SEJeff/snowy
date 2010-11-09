@@ -22,7 +22,7 @@
      var input = $('#filter');
      var popup = $('#sharing_container');
      // The current url + /sharing
-     var url   = "{% url note_share_no_slug note.author note.id %}";
+     var url = "{% url note_share_no_slug note.author note.id %}";
 
      $('#share_button').click(function() {
        if (popup.hasClass("hidden") == true) {
@@ -34,6 +34,7 @@
          popup.addClass("hidden");
        };
      });
+     // TODO: Fully flesh this out for clicking the invite link
      $('#invite_link').click(function() {
          var email = input.val();
 	 //alert("Email: " + email);
@@ -47,6 +48,9 @@
 	     }
 	 );
      });
+     //$('#public').change(function() {
+     //    var checked = $(this).
+     //}
 
      function add_table_rows(json_list, header) {
 	 if (json_list.length > 0) {
