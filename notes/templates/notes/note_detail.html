@@ -19,39 +19,9 @@
  $(document).ready(function() {
      // Hide the invite new user link by default
      $('#invite').hide();
-
      var popup = $('#sharing_container');
-     var url   = "{% url note_share_no_slug note.author note.id %}";
-
-     function add_to_popup() {
-         $.getJSON(url, function(json) {
-             var tbody = $('#filter_table tbody');
-             var user_list = json.shared_with;
-             // Loop over the list of users and add them to the popup
-             for (i=0; i <= user_list.length - 1; i++) {
-                 row = "<tr><td class=\"center\"><input type=\"checkbox\" checked></input></td><td>"+user_list[i]+"</td></tr>";
-                 tbody.append(row + "\n")
-             }
-         });
-     }
-     add_to_popup();
-
-     // When clicking the json button
-     $('#json').click(
-         function() {
-	     $.getJSON(url, function(json) {
-	         var tbody = $('#filter_table tbody');
-	         var user_list = json.shared_with;
-		 // Loop over the list of users and add them to the popup
-	         for (i=0; i <= user_list.length - 1; i++) {
-	             row = "<tr><td class=\"center\"><input type=\"checkbox\"></input></td><td>"+user_list[i]+"</td></tr>";
-	             tbody.append(row + "\n")
-	         }
-	     });
-	 });
 
      $('#share_button').click(function() {
-       //add_to_popup();
        if (popup.hasClass("hidden") == true) {
          popup.removeClass("hidden");
          // Focus the input for usability
@@ -60,6 +30,27 @@
        else {
          popup.addClass("hidden");
        };
+     });
+
+     function add_table_rows(json_list, header) {
+	 if (json_list.length > 0) {
+	     row = '<tr><td colspan="2">' + header + '</td></tr>\n';
+	     tbody.append(row);
+	 }
+         // Loop over the list of users and add them to the popup
+         for (i=0; i <= json_list.length - 1; i++) {
+             row = "<tr><td class=\"center\"><input type=\"checkbox\" checked></input></td><td>"+json_list[i]+"</td></tr>";
+             tbody.append(row + "\n")
+         }
+     }
+
+     var tbody = $('#filter_table tbody');
+     var url   = "{% url note_share_no_slug note.author note.id %}";
+
+     // Add json to the dropdown "Share this note" menu
+     $.getJSON(url, function(json) {
+	 add_table_rows(json.shared_with, "Shared with");
+	 //add_table_rows(json.invitations, "Invitations sent to these users");
      });
  });
 
@@ -111,7 +102,9 @@
  <thead><tr id="invite"><th><a href="#">Invite<span id="replace_email"></span> by email</a></th></tr></thead>
   <tbody><tr style="display: table-row;"></tr>
    <tr><td class="center"><input type="checkbox"></input></td><td>Make this note public</td></tr>
+   <!--
    <tr><td colspan="2">Share with these users</td></tr>
+   -->
   </tbody>
  </table>
  </form>

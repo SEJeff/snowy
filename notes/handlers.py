@@ -41,6 +41,7 @@ except ImportError:
 # http://domain/user/notes/id/slug/sharing
 class ShareHandler(BaseHandler):
     allowed_methods = ('GET', 'PUT')
+    model = Share
 
     def read(self, request, username, note_id, slug=None):
         author = User.objects.get(username=username)
@@ -49,18 +50,25 @@ class ShareHandler(BaseHandler):
             return rc.FORBIDDEN
 
         share_users = []
+	share_emails = []
         shares = Share.objects.filter(person_sharing=author, note=note)
         if shares:
             for s in shares:
                 username = getattr(s.person_rcvx, 'username', None)
-                if username:
+		if username:
                     share_users.append(username)
+		else:
+                    email = getattr(s, 'email', '_BOGUS@EMAIL_')
+		    share_emails.append(email)
         else:
             share_users = []
 
 	# TODO: shared_with is users that have a 2 way agreed upon sharing relationship
 	# TODO: Add in support for 'in-progress' sharing requests
         return {
-            'title': note.title,
             'shared_with': share_users,
+            'invitations': share_emails,
         }
+
+    def create(self, request, username, note_id, slug=None):
+        pass

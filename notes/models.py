@@ -110,33 +110,46 @@ class Share(models.Model):
     person_rcvx    = models.ForeignKey(User, related_name='receiver', blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     note = models.ForeignKey(Note)
-    notified = models.BooleanField(default=False, help_text="notification sent")
+    notified = models.BooleanField(default=False, help_text=_('user notified'))
     # Same as in Note.guid
     token = models.CharField(max_length=36, default=create_uuid)
+    # Necessary before an account is created and person_rcvx=None
+    email = models.EmailField()
 
     def is_expired(self):
         """
-	Find out if a Share is expired
-	"""
+        Find out if a Share is expired
+        """
         days = (datetime.datetime.now() - self.created).days
         if days > getattr(settings, "SNOWY_INVITE_EXPIRATION", 30):
-	    return True
-	else:
-	    return False
+            return True
+        else:
+            return False
 
     def is_active(self):
         """
-	Funky logic to see if a receiving person has created a user
-	"""
+        Funky logic to see if a receiving person has created a user
+        """
         return not self.person_rcvx is None
+
+    def save(self, *args, **kwargs):
+	# Make sure the denormalized email field is kept in sync
+        if self.is_active() and self.email != self.person_rcvx.email:
+            self.email = self.person_rcvx.email
+
+	# If the out of band "notification" app doesn't set
+	# Share.notified=True, set it automatically.
+	if self.is_active() and not self.notified:
+	    self.notified = True
+        super(Share, self).save(*args, **kwargs)
 
     def __unicode__(self):
         message = "%s sharing: '%s" % (self.person_sharing.username, self.note.title)
-	if self.person_rcvx:
-	    message += "' with %s" % self.person_rcvx
-	else:
-	    message += "'"
-	return message
+        if self.person_rcvx:
+            message += "' with %s" % self.person_rcvx
+        else:
+            message += "'"
+        return message
 
 def _update_is_notebook(sender, instance, **kwargs):
     """
