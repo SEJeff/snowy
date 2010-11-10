@@ -1,10 +1,6 @@
 $(function() {
   var popup_menu = $('table.filter_table');
 
-  popup_menu.find("tbody > tr").find("td:eq(1)").mousedown(function(){
-    $(this).prev().find(":checkbox").click()
-  });
-
   $("#filter").keyup(function() {
     $.uiTableFilter( popup_menu, this.value );
     var invite = $('#invite');

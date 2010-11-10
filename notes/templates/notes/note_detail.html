@@ -69,6 +69,15 @@
      $.getJSON(url, function(json) {
 	 add_table_rows(json.shared_with, "Shared with");
 	 //add_table_rows(json.invitations, "Invitations sent to these users");
+  // This needs to happen _after_ the json adds the rows
+  // otherwise hitting enter for checkboxes is broken
+  // TODO: Put the list this gets from ajax in the view and move this back to uitablefilter-setup.js
+  var popup_menu = $('table.filter_table');
+  popup_menu.find("tbody > tr").find("td:eq(1)").mousedown(function(){
+    $(this).prev().find(":checkbox").click()
+  });
+  ////////////////////////
+
      });
  });
 
@@ -120,9 +129,6 @@
  <thead><tr id="invite"><th><a href="#" id="invite_link">Invite<span id="replace_email"></span> by email</a></th></tr></thead>
   <tbody><tr style="display: table-row;"></tr>
    <tr><td class="center"><input id="public" type="checkbox"></input></td><td>Make this note public</td></tr>
-   <!--
-   <tr><td colspan="2">Share with these users</td></tr>
-   -->
   </tbody>
  </table>
  </form>
