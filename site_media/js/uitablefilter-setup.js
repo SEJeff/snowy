@@ -17,7 +17,7 @@ $(function() {
     }
   });
 
-  $('#filter-form').submit(function(){
+  $('#filter-form').submit(function() {
     popup_menu.find("tbody > tr:visible > td:eq(1)").mousedown();
     return false;
   });
