@@ -36,30 +36,26 @@
      });
      // TODO: Fully flesh this out for clicking the invite link
      $('#invite_link').click(function() {
-         var email = input.val();
-	 //alert("Email: " + email);
-	 $.post(url, {email: email},
-	     function(data) {
-		 // Hide and reset the input
-	         popup.addClass("hidden");
-	         input.val('');
-	         alert("Returned: " + data);
-		 return false;
-	     }
-	 );
+       var email = input.val();
+       //alert("Email: " + email);
+       $.post(url, {email: email},
+         function(data) {
+           // Hide and reset the input
+           popup.addClass("hidden");
+           input.val('');
+           alert("Returned: " + data);
+           return false;
+         });
      });
-     //$('#public').change(function() {
-     //    var checked = $(this).
-     //}
 
      function add_table_rows(json_list, header) {
-	 if (json_list.length > 0) {
-	     row = '<tr><td colspan="2">' + header + '</td></tr>\n';
-	     tbody.append(row);
-	 }
+     if (json_list.length > 0) {
+         row = '<tr><td colspan="2">' + header + '</td></tr>\n';
+         tbody.append(row);
+     }
          // Loop over the list of users and add them to the popup
          for (i=0; i <= json_list.length - 1; i++) {
-             row = "<tr><td class=\"center\"><input type=\"checkbox\" checked></input></td><td>"+json_list[i]+"</td></tr>";
+             row = "<tr><td class=\"center\"><input type=\"checkbox\" value=\""+json_list[i]+"\"checked></input></td><td>"+json_list[i]+"</td></tr>";
              tbody.append(row + "\n")
          }
      }
@@ -67,17 +63,16 @@
      var tbody = $('#filter_table tbody');
      // Add json to the dropdown "Share this note" menu
      $.getJSON(url, function(json) {
-	 add_table_rows(json.shared_with, "Shared with");
-	 //add_table_rows(json.invitations, "Invitations sent to these users");
-  // This needs to happen _after_ the json adds the rows
-  // otherwise hitting enter for checkboxes is broken
-  // TODO: Put the list this gets from ajax in the view and move this back to uitablefilter-setup.js
-  var popup_menu = $('table.filter_table');
-  popup_menu.find("tbody > tr").find("td:eq(1)").mousedown(function(){
-    $(this).prev().find(":checkbox").click()
-  });
-  ////////////////////////
-
+       add_table_rows(json.shared_with, "Shared with");
+       //add_table_rows(json.invitations, "Invitations sent to these users");
+       // This needs to happen _after_ the json adds the rows
+       // otherwise hitting enter for checkboxes is broken
+       // TODO: Put the list this gets from ajax in the view and move this back to uitablefilter-setup.js
+       var popup_menu = $('table.filter_table');
+       popup_menu.find("tbody > tr").find("td:eq(1)").mousedown(function(){
+         $(this).prev().find(":checkbox").click();
+       });
+       ////////////////////////
      });
  });
 
