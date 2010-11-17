@@ -134,7 +134,7 @@
 {% endblock %}
 
 {% block content %}
-<button id="share_button">Share this note</button>
+<button id="share_button" title="Share this note" style="margin-top: auto;">{% if note.permissions == 0 %}<img src="{{ MEDIA_URL }}img/private.png"</img>{% endif %}<!--Share this note--></button>
 <div id="sharing_container" class="hidden popup">
  <form id="filter-form"><input class="invitation" id="filter" maxlength="50" size="30" type="text"></form>
  <table id="filter_table" class="filter_table fullwidth">
