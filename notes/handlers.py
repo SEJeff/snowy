@@ -88,15 +88,26 @@ class ShareHandler(BaseHandler):
                 return rc.FORBIDDEN
         except self.model.DoesNotExist:
             return rc.NOT_FOUND
-        pdb.set_trace()
+        #pdb.set_trace()
         try:
-            # TODO: Add explicit exception handling
-            (model, new) = self.model.objects.get_or_create(email=attrs['email'], person_sharing=request.user, note=note)
+            public = attrs.get('public')
+            if public != None:
+                if public == u'true':
+                    note.permissions = 1
+                else:
+                    note.permissions = 0
+                note.save()
+                ret = rc.ALL_OK
+            elif attrs.get('email') != None:
+                # TODO: Add explicit exception handling
+                email = attrs.get('email')
+                (model, new) = self.model.objects.get_or_create(email=email, person_sharing=request.user, note=note)
+                if new:
+                    model.save()
+                    ret = rc.CREATED
+                else:
+                    ret = rc.ALL_OK
         except:
-            return rc.BAD_REQUEST
-        if new:
-            model.save()
-            ret = rc.CREATED
-        else:
-            ret = rc.ALL_OK
+            ret = rc.BAD_REQUEST
+
         return ret

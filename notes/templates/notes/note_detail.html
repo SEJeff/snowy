@@ -37,12 +37,12 @@
      // TODO: Fully flesh this out for clicking the invite link
      $('#invite_link').click(function() {
        var email = input.val();
-       //alert("Email: " + email);
        $.post(url, {email: email},
          function(data) {
            // Hide and reset the input
            popup.addClass("hidden");
            input.val('');
+	   // TODO: Fix this
            alert("Returned: " + data);
            return false;
          });
@@ -76,10 +76,20 @@
      });
     $('#public').click(function() {
       clicked = $(this).val() == "on";
-      //alert($(this).val() == "on" );
-      alert(clicked);
-      //$.post(url, {'public':
-      //});
+      //alert(clicked);
+      $.post(url, {'public': clicked}, function(value) {
+	if (value == "OK") {
+	    if (clicked == true) {
+	        var message = "Note {{ note.title }} is now public!";
+            } else {
+	        var message = "Note {{ note.title }} is now private!";
+	    }
+	} else {
+	    var message = "Problem with making note public/private!";
+	}
+	alert(message);
+        return false;
+      });
     });
  });
 
@@ -130,7 +140,7 @@
  <table id="filter_table" class="filter_table fullwidth">
  <thead><tr id="invite"><th><a href="#" id="invite_link">Invite<span id="replace_email"></span> by email</a></th></tr></thead>
   <tbody><tr style="display: table-row;"></tr>
-   <tr><td class="center"><input id="public" type="checkbox"></input></td><td>Make this note public</td></tr>
+   <tr><td class="center"><input id="public" type="checkbox" {% if note.permissions == 1 %}checked{%endif %}></input></td><td>Make this note public</td></tr>
   </tbody>
  </table>
  </form>
