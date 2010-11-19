@@ -62,6 +62,7 @@
 
      var tbody = $('#filter_table tbody');
      // Add json to the dropdown "Share this note" menu
+     /*
      $.getJSON(url, function(json) {
        add_table_rows(json.shared_with, "Shared with");
        //add_table_rows(json.invitations, "Invitations sent to these users");
@@ -74,6 +75,7 @@
        });
        ////////////////////////
      });
+     */
     $('#public').click(function() {
       clicked = $(this).val() == "on";
       $.post(url, {'public': clicked}, function(value) {
