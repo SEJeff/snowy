@@ -42,7 +42,7 @@
            // Hide and reset the input
            popup.addClass("hidden");
            input.val('');
-	   // TODO: Fix this
+           // TODO: Fix this
            alert("Returned: " + data);
            return false;
          });
@@ -76,18 +76,23 @@
      });
     $('#public').click(function() {
       clicked = $(this).val() == "on";
-      //alert(clicked);
       $.post(url, {'public': clicked}, function(value) {
-	if (value == "OK") {
-	    if (clicked == true) {
-	        var message = "Note {{ note.title }} is now public!";
-            } else {
-	        var message = "Note {{ note.title }} is now private!";
-	    }
-	} else {
-	    var message = "Problem with making note public/private!";
-	}
-	alert(message);
+        if (value == "OK") {
+          var button = $("#share_button");
+          var img = $("#share_button img");
+          if (clicked == true) {
+            var message = "Note {{ note.title }} is now public!";
+            img.attr("src", "{{ MEDIA_URL }}img/public.png");
+            button.attr("title", "This note is public");
+          } else {
+            var message = "Note {{ note.title }} is now private!";
+            img.attr("src", "{{ MEDIA_URL }}img/private.png");
+            button.attr("title", "This note is private");
+          }
+        } else {
+            var message = "Problem with making note public/private!";
+        }
+        //alert(message);
         return false;
       });
     });
