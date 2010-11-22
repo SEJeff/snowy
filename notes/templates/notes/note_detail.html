@@ -58,24 +58,9 @@
              row = "<tr><td class=\"center\"><input type=\"checkbox\" value=\""+json_list[i]+"\"checked></input></td><td>"+json_list[i]+"</td></tr>";
              tbody.append(row + "\n")
          }
-     }
+    }
 
-     var tbody = $('#filter_table tbody');
-     // Add json to the dropdown "Share this note" menu
-     /*
-     $.getJSON(url, function(json) {
-       add_table_rows(json.shared_with, "Shared with");
-       //add_table_rows(json.invitations, "Invitations sent to these users");
-       // This needs to happen _after_ the json adds the rows
-       // otherwise hitting enter for checkboxes is broken
-       // TODO: Put the list this gets from ajax in the view and move this back to uitablefilter-setup.js
-       var popup_menu = $('table.filter_table');
-       popup_menu.find("tbody > tr").find("td:eq(1)").mousedown(function(){
-         $(this).prev().find(":checkbox").click();
-       });
-       ////////////////////////
-     });
-     */
+    var tbody = $('#filter_table tbody');
     $('#public').click(function() {
       clicked = $(this).val() == "on";
       $.post(url, {'public': clicked}, function(value) {
@@ -141,13 +126,19 @@
 {% endblock %}
 
 {% block content %}
-<button id="share_button" title="Share this note" style="margin-top: auto;">{% if note.permissions == 0 %}<img src="{{ MEDIA_URL }}img/private.png"</img>{% endif %}{% if note.permissions == 1 %}<img src="{{ MEDIA_URL }}img/public.png"</img>{% endif %}<!--Share this note--></button>
+<button id="share_button" title="Share this note" style="margin-top: auto;">{% if note.permissions == 0 %}<img src="{{ MEDIA_URL }}img/private.png"</img>{% endif %}{% if note.permissions == 1 %}<img src="{{ MEDIA_URL }}img/public.png"</img>{% endif %}</button>
 <div id="sharing_container" class="hidden popup">
- <form id="filter-form"><input class="invitation" id="filter" maxlength="50" size="30" type="text"></form>
+ <form id="filter-form"><input class="invitation" id="filter" maxlength="50" size="30" type="text">
  <table id="filter_table" class="filter_table fullwidth">
  <thead><tr id="invite"><th><a href="#" id="invite_link">Invite<span id="replace_email"></span> by email</a></th></tr></thead>
   <tbody><tr style="display: table-row;"></tr>
    <tr><td class="center"><input id="public" type="checkbox" {% if note.permissions == 1 %}checked{%endif %}></input></td><td>Make this note public</td></tr>
+{% for username in share_users %}
+<tr><td class="center"><input type="checkbox" value="{{ username }}" checked></input></td><td>{{ username }}</td></tr>
+{% endfor %}
+{% for email in share_emails %}
+<tr><td class="center"><input type="checkbox" value="{{ email }}" checked></input></td><td>{{ email }}</td></tr>
+{% endfor %}
   </tbody>
  </table>
  </form>

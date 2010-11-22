@@ -59,6 +59,7 @@ def note_detail(request, username, note_id, slug='',
     author = get_object_or_404(User, username=username)
     note = get_object_or_404(Note, pk=note_id, author=author)
 
+    # TODO: Add access for sharing check here
     if request.user != author and note.permissions == 0:
         return HttpResponseForbidden()
 
@@ -67,8 +68,23 @@ def note_detail(request, username, note_id, slug='',
 
     body = note_to_html(note, author)
 
+    share_users = []
+    share_emails = []
+    shares = Share.objects.filter(person_sharing=author, note=note)
+    if shares:
+        for s in shares:
+            username = getattr(s.person_rcvx, 'username', None)
+            if username:
+                share_users.append(username)
+            else:
+                email = getattr(s, 'email', '')
+                if email:
+                    share_emails.append(email)
+
     return render_to_response(template_name,
                               {'title': note.title,
                                'note': note, 'body': body,
-                               'request': request, 'author': author},
+                               'request': request, 'author': author,
+			       'share_users': share_users, 'share_emails': share_emails,
+			       },
                               context_instance=RequestContext(request))
