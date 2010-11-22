@@ -21,4 +21,7 @@ $(function() {
     popup_menu.find("tbody > tr:visible > td:eq(1)").mousedown();
     return false;
   });
+  popup_menu.mouseleave(function() {
+      $("#sharing_container").addClass("hidden");
+  });
 });
