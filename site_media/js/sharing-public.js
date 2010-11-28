@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2010 Jeff Schroeder <jeffschroeder@computer.org>
+ *
+ * This program is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU Affero General Public License as published by the Free
+ * Software Foundation, either version 3 of the License, or (at your option) any
+ * later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
 $(document).ready(function() {
   // Public / Private note functionality is good for now.
   var img = $("input[type='image']");
@@ -35,15 +51,11 @@ $(document).ready(function() {
   $("fieldset#share_link_menu").mouseup(function() {
     return false
   });
-  /* End code for clicking the share this note button */
-
-
 
   /* When clicking the invite new user link */
   // Hide the invite new user link by default
   $('#invite').hide();
   var input = $('#filter');
-  // The current url + /sharing
   // TODO: Fully flesh this out for clicking the invite link
   $('#invite_link').click(function() {
     var email = input.val();
