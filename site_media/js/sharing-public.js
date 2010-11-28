@@ -43,12 +43,13 @@ $(document).ready(function() {
   });
 
   /******** This is for clicking the share this note button *********/
+  var input = $('#filter');
   $(".share_link").click(function(e) {
     e.preventDefault();
     $("fieldset#share_link_menu").toggle();
     $(".share_link").toggleClass("menu-open");
     // Focus the input box when clicking the signin link
-    $("#filter").focus();
+    input.focus();
   });
 
   $("fieldset#share_link_menu").mouseup(function() {
@@ -58,14 +59,11 @@ $(document).ready(function() {
   /************* When clicking the invite new user link *************/
   // Hide the invite new user link by default
   $('#invite').hide();
-  var input = $('#filter');
   // TODO: Fully flesh this out for clicking the invite link
   $('#invite_link').click(function() {
     var email = input.val();
     $.post(url, {email: email},
       function(data) {
-        // TODO: Hide and reset the input
-        alert("Invitation sent to " + email);
         // Add the newly sent invitation to the sharing box
         var row = '<tr style="display: table-row;"><td class="center"><input type="checkbox" value="' + email + '" checked></td><td>' + email + '</td></tr>';
         // Hide the menu, reset the input, and append the new row
@@ -73,9 +71,10 @@ $(document).ready(function() {
           $(".share_link").toggleClass("menu-open");
           $("#filter_table:tbody").append(row);
           // Reset the table
-          $("#filter").val('');
+          input.val('');
           $('#invite').hide();
           $.uiTableFilter($('table.filter_table'), '');
+          alert("Invitation sent to " + email);
         });
         return false;
       });
