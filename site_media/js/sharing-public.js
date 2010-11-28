@@ -42,7 +42,7 @@ $(document).ready(function() {
     });
   });
 
-  /* This is for clicking the share this note button */
+  /******** This is for clicking the share this note button *********/
   $(".share_link").click(function(e) {
     e.preventDefault();
     $("fieldset#share_link_menu").toggle();
@@ -55,7 +55,7 @@ $(document).ready(function() {
     return false
   });
 
-  /* When clicking the invite new user link */
+  /************* When clicking the invite new user link *************/
   // Hide the invite new user link by default
   $('#invite').hide();
   var input = $('#filter');
@@ -66,11 +66,22 @@ $(document).ready(function() {
       function(data) {
         // TODO: Hide and reset the input
         alert("Invitation sent to " + email);
+        // Add the newly sent invitation to the sharing box
+        var row = '<tr style="display: table-row;"><td class="center"><input type="checkbox" value="' + email + '" checked></td><td>' + email + '</td></tr>';
+        // Hide the menu, reset the input, and append the new row
+        $("fieldset#share_link_menu").toggle(function() {
+          $(".share_link").toggleClass("menu-open");
+                $("#filter_table:tbody").append(row);
+          // TODO: Make this actually reset the uitablefilter
+          $("#filter").val('');
+          $("#filter").click()
+        });
         return false;
       });
   });
 });
 
+/*********** When clicking off the sharing menu, hide it ************/
 $(document).mouseup(function(e) {
   if($(e.target).parent("a.share_link").length==0) {
     $(".share_link").removeClass("menu-open");
