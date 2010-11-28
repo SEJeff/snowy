@@ -28,6 +28,7 @@ $(document).ready(function() {
       success: function(value, textStatus) {
                  if (status == true) {
                    img.attr("src", media_url + "img/public.png");
+                   // TODO: Translate this
                    img.attr("title", "This note is public for anyone to see");
                  }
                  else {
@@ -46,6 +47,8 @@ $(document).ready(function() {
     e.preventDefault();
     $("fieldset#share_link_menu").toggle();
     $(".share_link").toggleClass("menu-open");
+    // Focus the input box when clicking the signin link
+    $("#filter").focus();
   });
 
   $("fieldset#share_link_menu").mouseup(function() {
