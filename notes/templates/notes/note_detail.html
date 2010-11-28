@@ -70,10 +70,10 @@
    <thead><tr id="invite" class="hidden"><th><a href="#" id="invite_link">Invite<span id="replace_email"></span> by email</a></th></tr></thead>
     <tbody><tr style="display: table-row;"></tr>
   {% for username in share_users %}
-  <tr><td class="center"><input type="checkbox" value="{{ username }}" checked></input></td><td>{{ username }}</td></tr>
+  <tr><td class="center"><input type="checkbox" value="{{ username }}" id="{{ username }} checked></input></td><td><label for="{{ username }}">{{ username }}</label></td></tr>
   {% endfor %}
   {% for email in share_emails %}
-  <tr><td class="center"><input type="checkbox" value="{{ email }}" checked></input></td><td>{{ email }}</td></tr>
+  <tr><td class="center"><input type="checkbox" value="{{ email }}" id="{{ email }}" checked></input></td><td><label for="{{ email }}">{{ email }}</label></td></tr>
   {% endfor %}
     </tbody>
    </table>

@@ -64,8 +64,8 @@ $(document).ready(function() {
     $.post(url, {email: email},
       function(data) {
         // Add the newly sent invitation to the sharing box
-        var row = '<tr style="display: table-row;"><td class="center"><input type="checkbox" value="' + email + '" checked></td><td>' + email + '</td></tr>';
-        // Hide the menu, reset the input, and append the new row
+        var id  = email.replace("@", "_");
+        var row = '<tr style="display: table-row;"><td class="center"><input type="checkbox" value="' + email + '" id="' + id + '" checked></td><td><label for="' + id + '">' + email + '</label></td></tr>';
         $("fieldset#share_link_menu").toggle(function() {
           $(".share_link").toggleClass("menu-open");
           $("#filter_table:tbody").append(row);
