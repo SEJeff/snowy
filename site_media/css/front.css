@@ -9,7 +9,7 @@
 	line-height:23px;
 	text-align:right;
 }
-#topnav a.signin {
+#topnav a.share_link {
 	background:#88bbd4;
 	padding:4px 6px 6px;
 	text-decoration:none;
@@ -21,20 +21,20 @@
 	*background:transparent url("/site_media/img/signin-nav-bg-ie.png") no-repeat 0 0;
 	*padding:4px 12px 6px;
 }
-#topnav a.signin:hover {
+#topnav a.share_link:hover {
 	background:#59B;
 	*background:transparent url("/site_media/img/signin-nav-bg-hover-ie.png") no-repeat 0 0;
 	*padding:4px 12px 6px;
 }
-#topnav a.signin, #topnav a.signin:hover {
+#topnav a.share_link, #topnav a.signin:hover {
 	*background-position:0 3px!important;
 }
 
-a.signin {
+a.share_link {
 	position:relative;
 	margin-left:3px;
 }
-a.signin span {
+a.share_link span {
 	background-image:url("/site_media/img/toggle_down_light.png");
 	background-repeat:no-repeat;
 	background-position:100% 50%;
@@ -52,12 +52,12 @@ a.signin span {
 	margin:25px 0 0;
 	width:170px;
 }
-a.signin.menu-open span {
+a.share_link.menu-open span {
 	background-image:url("/site_media/img/toggle_up_dark.png");
 	color:#789;
 }
 
-#signin_menu {
+#share_link_menu {
 	-moz-border-radius-topleft:5px;
 	-moz-border-radius-bottomleft:5px;
 	-moz-border-radius-bottomright:5px;
@@ -81,7 +81,7 @@ a.signin.menu-open span {
 	font-size:11px;
 }
 
-#signin_menu input[type=text], #signin_menu input[type=password] {
+#share_link_menu input[type=text], #signin_menu input[type=password] {
 	display:block;
 	-moz-border-radius:4px;
 	-webkit-border-radius:4px;
