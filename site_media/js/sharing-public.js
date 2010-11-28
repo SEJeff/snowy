@@ -16,6 +16,7 @@
 */
 $(document).ready(function() {
   // Public / Private note functionality is good for now.
+  /************** This is for clicking the lock image ***************/
   var img = $("input[type='image']");
   img.click(function() {
     // Use the opposite of the current status to toggle
@@ -58,8 +59,6 @@ $(document).ready(function() {
 
   /************* When clicking the invite new user link *************/
   // Hide the invite new user link by default
-  $('#invite').hide();
-  // TODO: Fully flesh this out for clicking the invite link
   $('#invite_link').click(function() {
     var email = input.val();
     $.post(url, {email: email},
