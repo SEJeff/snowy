@@ -15,21 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+# TODO: use this exception
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
-from django.db import transaction
-from django.db.models import Max
 
-# TODO: Is AnonymousBaseHandler necessary?
-from piston.handler import AnonymousBaseHandler, BaseHandler
-from piston.utils import rc, HttpStatusCode
+from piston.utils import rc
+from piston.handler import BaseHandler
 
-from datetime import datetime
-
-from snowy.core.urlresolvers import reverse_full
 from snowy.notes.models import Note
 from snowy.notes.models import Share
-from snowy import settings
 
 # Use simplejson or Python 2.6 json, prefer simplejson.
 try:
@@ -40,45 +34,45 @@ except ImportError:
 # http://domain/user/notes/id/sharing
 # http://domain/user/notes/id/slug/sharing
 class ShareHandler(BaseHandler):
-    allowed_methods = ('GET', 'PUT', 'POST')
-    model = Share
+    allowed_methods = ('PUT', 'POST')
+    #model = Share
+    #def create(self, request, username, note_id, slug=None):
+    #    """
+    #    When $.post() is called via jQuery. Unfortunately, HTTP PUT
+    #    is not well supported by some browsers and many clients  so
+    #    we   overload   POST   to  also  update  checkbox  changes.
+    #    """
+    #    model = Share
+    #    data  = request.POST
+    #    attrs = self.flatten_dict(data)
+    #    user  = request.user
+    #    try:
+    #        note = Note.objects.get(pk=note_id)
+    #        # Sharing privileges are only for note authors
+    #        if note.author != user:
+    #            return rc.FORBIDDEN
+    #    except self.model.DoesNotExist:
+    #        return rc.NOT_FOUND
+    #    try:
+    #        if attrs.get('email') != None:
+    #            # TODO: Add explicit exception handling
+    #            email = attrs.get('email')
+    #            (model, new) = self.model.objects.get_or_create(email=email, person_sharing=request.user, note=note)
+    #            if new:
+    #                model.save()
+    #                ret = rc.CREATED
+    #            else:
+    #                ret = rc.ALL_OK
+    #    except:
+    #        ret = rc.BAD_REQUEST
+    #
+    #    return ret
 
-    def read(self, request, username, note_id, slug=None):
-        """When $.getJSON() is called via jQuery"""
-        author = User.objects.get(username=username)
-        note = Note.objects.get(pk=note_id, author=author)
-        if request.user != author and note.permissions == 0:
-            return rc.FORBIDDEN
-
-        share_users = []
-        share_emails = []
-        shares = Share.objects.filter(person_sharing=author, note=note)
-        if shares:
-            for s in shares:
-                username = getattr(s.person_rcvx, 'username', None)
-                if username:
-                    share_users.append(username)
-                else:
-                    email = getattr(s, 'email', '_BOGUS@EMAIL_')
-                    share_emails.append(email)
-        else:
-            share_users = []
-
-        # TODO: shared_with is users that have a 2 way agreed upon sharing relationship
-        # TODO: Add in support for 'in-progress' sharing requests
-        return {
-            'shared_with': share_users,
-            'invitations': share_emails,
-        }
-
-    def create(self, request, username, note_id, slug=None):
+    def update(self, request, username, note_id, slug=None):
         """
-        When $.post() is called via jQuery. Unfortunately, HTTP PUT
-        is not well supported by some browsers and many clients  so
-        we   overload   POST   to  also  update  checkbox  changes.
+        PUT updates for public/private
         """
-        import pdb
-        data  = request.POST
+        data  = request.PUT
         attrs = self.flatten_dict(data)
         user  = request.user
         try:
@@ -88,7 +82,6 @@ class ShareHandler(BaseHandler):
                 return rc.FORBIDDEN
         except self.model.DoesNotExist:
             return rc.NOT_FOUND
-        #pdb.set_trace()
         try:
             public = attrs.get('public')
             if public != None:
@@ -98,16 +91,6 @@ class ShareHandler(BaseHandler):
                     note.permissions = 0
                 note.save()
                 ret = rc.ALL_OK
-            elif attrs.get('email') != None:
-                # TODO: Add explicit exception handling
-                email = attrs.get('email')
-                (model, new) = self.model.objects.get_or_create(email=email, person_sharing=request.user, note=note)
-                if new:
-                    model.save()
-                    ret = rc.CREATED
-                else:
-                    ret = rc.ALL_OK
         except:
             ret = rc.BAD_REQUEST
-
         return ret
