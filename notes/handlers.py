@@ -35,38 +35,37 @@ except ImportError:
 # http://domain/user/notes/id/slug/sharing
 class ShareHandler(BaseHandler):
     allowed_methods = ('PUT', 'POST')
-    #model = Share
-    #def create(self, request, username, note_id, slug=None):
-    #    """
-    #    When $.post() is called via jQuery. Unfortunately, HTTP PUT
-    #    is not well supported by some browsers and many clients  so
-    #    we   overload   POST   to  also  update  checkbox  changes.
-    #    """
-    #    model = Share
-    #    data  = request.POST
-    #    attrs = self.flatten_dict(data)
-    #    user  = request.user
-    #    try:
-    #        note = Note.objects.get(pk=note_id)
-    #        # Sharing privileges are only for note authors
-    #        if note.author != user:
-    #            return rc.FORBIDDEN
-    #    except self.model.DoesNotExist:
-    #        return rc.NOT_FOUND
-    #    try:
-    #        if attrs.get('email') != None:
-    #            # TODO: Add explicit exception handling
-    #            email = attrs.get('email')
-    #            (model, new) = self.model.objects.get_or_create(email=email, person_sharing=request.user, note=note)
-    #            if new:
-    #                model.save()
-    #                ret = rc.CREATED
-    #            else:
-    #                ret = rc.ALL_OK
-    #    except:
-    #        ret = rc.BAD_REQUEST
-    #
-    #    return ret
+    model = Share
+
+    def create(self, request, username, note_id, slug=None):
+        """
+        When $.post() is called via jQuery. Unfortunately, HTTP PUT
+        is not well supported by some browsers and many clients  so
+        we   overload   POST   to  also  update  checkbox  changes.
+        """
+        data  = request.POST
+        attrs = self.flatten_dict(data)
+        user  = request.user
+        try:
+            note = Note.objects.get(pk=note_id)
+            # Sharing privileges are only for note authors
+            if note.author != user:
+                return rc.FORBIDDEN
+        except self.model.DoesNotExist:
+            return rc.NOT_FOUND
+        try:
+            if attrs.get('email') != None:
+                # TODO: Add explicit exception handling
+                email = attrs.get('email')
+                (model, new) = self.model.objects.get_or_create(email=email, person_sharing=request.user, note=note)
+                if new:
+                    model.save()
+                    ret = rc.CREATED
+                else:
+                    ret = rc.ALL_OK
+        except:
+            ret = rc.BAD_REQUEST
+        return ret
 
     def update(self, request, username, note_id, slug=None):
         """

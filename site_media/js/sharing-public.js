@@ -25,6 +25,7 @@ $(document).ready(function() {
     });
   });
 
+  /* This is for clicking the share this note button */
   $(".share_link").click(function(e) {
     e.preventDefault();
     $("fieldset#share_link_menu").toggle();
@@ -34,13 +35,30 @@ $(document).ready(function() {
   $("fieldset#share_link_menu").mouseup(function() {
     return false
   });
+  /* End code for clicking the share this note button */
+
+
+
+  /* When clicking the invite new user link */
+  // Hide the invite new user link by default
+  $('#invite').hide();
+  var input = $('#filter');
+  // The current url + /sharing
+  // TODO: Fully flesh this out for clicking the invite link
+  $('#invite_link').click(function() {
+    var email = input.val();
+    $.post(url, {email: email},
+      function(data) {
+        // TODO: Hide and reset the input
+        alert("Invitation sent to " + email);
+        return false;
+      });
+  });
+});
+
 $(document).mouseup(function(e) {
   if($(e.target).parent("a.share_link").length==0) {
     $(".share_link").removeClass("menu-open");
     $("fieldset#share_link_menu").hide();
   }
-});
-
-
-
 });

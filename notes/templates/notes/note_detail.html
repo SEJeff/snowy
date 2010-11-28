@@ -22,26 +22,6 @@
    var url = "{% url note_share_no_slug note.author note.id %}";
 </script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/sharing-public.js"></script>
-<script type="text/javascript">
- $(document).ready(function() {
-   // Hide the invite new user link by default
-   $('#invite').hide();
-   var input = $('#filter');
-   // The current url + /sharing
-   // TODO: Fully flesh this out for clicking the invite link
-   $('#invite_link').click(function() {
-     var email = input.val();
-     $.post(url, {email: email},
-       function(data) {
-         // Hide and reset the input
-         input.val('');
-         // TODO: Fix this
-         alert("Returned: " + data);
-         return false;
-       });
-   });
-});
-</script>
 {% endblock %}
 
 {% block title %}{{ title|safe }} | Notes | {{ block.super }}{% endblock %}
