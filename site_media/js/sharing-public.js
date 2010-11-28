@@ -71,10 +71,11 @@ $(document).ready(function() {
         // Hide the menu, reset the input, and append the new row
         $("fieldset#share_link_menu").toggle(function() {
           $(".share_link").toggleClass("menu-open");
-                $("#filter_table:tbody").append(row);
-          // TODO: Make this actually reset the uitablefilter
+          $("#filter_table:tbody").append(row);
+          // Reset the table
           $("#filter").val('');
-          $("#filter").click()
+          $('#invite').hide();
+          $.uiTableFilter($('table.filter_table'), '');
         });
         return false;
       });
