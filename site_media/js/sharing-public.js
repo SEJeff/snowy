@@ -11,7 +11,6 @@ $(document).ready(function() {
       data: {'public': status},
       success: function(value, textStatus) {
                  if (status == true) {
-		   // TODO: Figure out how to use {{ MEDIA_URL }} here
                    img.attr("src", media_url + "img/public.png");
                    img.attr("title", "This note is public for anyone to see");
                  }
