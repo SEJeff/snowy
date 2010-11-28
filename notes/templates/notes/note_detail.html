@@ -80,7 +80,7 @@
    </form>
   </fieldset>
 </div>
-{% if note.permissions == 0 %}<input type="image" src="{{ MEDIA_URL }}img/private.png" title="This note is private">{% endif %}{% if note.permissions == 1 %}<input type="image" class="public" src="{{ MEDIA_URL }}img/public.png" title="This note is public for anyone to see">{% endif %}
+{% if note.permissions == 0 %}<input type="image" src="{{ MEDIA_URL }}img/private.png" title="{% trans "This note is private" %}">{% endif %}{% if note.permissions == 1 %}<input type="image" class="public" src="{{ MEDIA_URL }}img/public.png" title="{% trans "This note is public for anyone to see" %}">{% endif %}
 <table id="content-layout" cellspacing="0" cellpadding="0">
     <tr>
         <td id="note">
