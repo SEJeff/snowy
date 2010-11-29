@@ -100,6 +100,30 @@ $(document).ready(function() {
         return false;
       });
   });
+
+  var table_rows = $("#filter_table tbody tr").slice(1);
+  //alert("hi");
+  //var new_id = table_rows.find("input:checkbox")[0].id;
+  //alert("new_id=" + new_id);
+
+  // Attach click handler to checkboxes
+  table_rows.find("input:checkbox").click(function(element) {
+    alert("id=" + $(this).attr("value") + "; checked=" + $(this).attr("checked") );
+    /*
+    var checked = $(this).attr("checked");
+    var email = 
+    $.ajax({
+      url: url,
+      type: 'PUT',
+      data: {'public': status},
+      success: function(value, textStatus) {
+               }
+      error: function(value, textStatus) {
+             }
+    });
+    */
+  });
+
 });
 
 /*********** When clicking off the sharing menu, hide it ************/

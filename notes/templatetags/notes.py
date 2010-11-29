@@ -15,7 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import re
 from django import template
+from django.template.defaultfilters import stringfilter
 
 from snowy import settings
 from snowy.notes.models import Note, NoteTag
@@ -92,3 +94,25 @@ class UserNotebookListNode(template.Node):
         context[self.dest] = NoteTag.objects.filter(author=author,
 	                                            is_notebook=True)[:5]
         return ''
+
+@stringfilter
+def safe_id(value):
+    """
+    Converts a string such as an email address to a safe html id.
+    Rules from: http://www.w3schools.com/tags/att_standard_id.asp
+
+    Usage:
+        email@address.com|safe_id
+    """
+    id = ""
+    if not re.search("^[A-Za-z]", value):
+        id = "a"
+    else:
+        id = value[0]
+    regex = re.compile("[A-Za-z-_:\.]+$")
+    for char in value[1:]:
+        if not regex.match(char):
+            char = "_"
+        id += char
+    return id
+register.filter(safe_id)

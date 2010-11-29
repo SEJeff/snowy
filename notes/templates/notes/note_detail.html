@@ -73,7 +73,7 @@
   <tr><td class="center"><input type="checkbox" value="{{ username }}" id="{{ username }}" checked></input></td><td><label for="{{ username }}">{{ username }}</label></td></tr>
   {% endfor %}
   {% for email in share_emails %}
-  <tr><td class="center"><input type="checkbox" value="{{ email }}" id="{{ email }}" checked></input></td><td><label for="{{ email }}">{{ email }}</label></td></tr>
+  <tr><td class="center"><input type="checkbox" value="{{ email }}" id="{{ email|safe_id }}" checked></input></td><td><label for="{{ email|safe_id }}">{{ email }}</label></td></tr>
   {% endfor %}
     </tbody>
    </table>
