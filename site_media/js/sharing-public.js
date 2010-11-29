@@ -14,6 +14,28 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+// Based on the rules from: http://www.w3schools.com/tags/att_standard_id.asp
+function safe_id(value) {
+  var id = "";
+  // Start with a letter
+  if ( ! value[0].match(/^[A-Za-z]/) ) {
+    id = "a";
+  }
+  else {
+    id += value[0];
+  }
+  // Nothing other than alnum, dashes, underscores, colons, or periods allowed.
+  for (i = 1; i < value.length; i++) {
+    var char = value[i];
+    if (! char.match(/^[A-Za-z-_:\.]+$/)) {
+        char = "_";
+    }
+    id += char;
+  }
+  return id
+}
+
 $(document).ready(function() {
   // Public / Private note functionality is good for now.
   /************** This is for clicking the lock image ***************/
@@ -64,7 +86,7 @@ $(document).ready(function() {
     $.post(url, {email: email},
       function(data) {
         // Add the newly sent invitation to the sharing box
-        var id  = email.replace("@", "_");
+        var id  = safe_id(email);
         var row = '<tr style="display: table-row;"><td class="center"><input type="checkbox" value="' + email + '" id="' + id + '" checked></td><td><label for="' + id + '">' + email + '</label></td></tr>';
         $("fieldset#share_link_menu").toggle(function() {
           $(".share_link").toggleClass("menu-open");
