@@ -67,20 +67,24 @@
   <fieldset id="share_link_menu">
    <form id="filter-form"><input class="invitation" id="filter" maxlength="50" size="30" type="text">
    <table id="filter_table" class="filter_table fullwidth">
-   <thead><tr id="invite" class="hidden"><th><a href="#" id="invite_link">Invite<span id="replace_email"></span> by email</a></th></tr></thead>
+   <thead>
+     <tr id="invite" class="hidden"><th><a href="#" id="invite_link">Invite<span id="replace_email"></span> by email</a></th></tr>
+   </thead>
     <tbody><tr style="display: table-row;"></tr>
-  {% for username in share_users %}
-  <tr><td class="center"><input type="checkbox" value="{{ username }}" id="{{ username }}" checked></input></td><td><label for="{{ username }}">{{ username }}</label></td></tr>
-  {% endfor %}
-  {% for email in share_emails %}
-  <tr><td class="center"><input type="checkbox" value="{{ email }}" id="{{ email|safe_id }}" checked></input></td><td><label for="{{ email|safe_id }}">{{ email }}</label></td></tr>
-  {% endfor %}
+      {% for username in share_users %}
+        <tr>
+          <td class="center"><input type="checkbox" value="{{ username }}" id="{{ username }}" checked></input></td><td><label for="{{ username }}">{{ username }}</label></td>
+        </tr>
+      {% endfor %}
+      {% for email in share_emails %}
+        <tr><td class="center"><input type="checkbox" value="{{ email }}" id="{{ email|safe_id }}" checked></input></td><td><label for="{{ email|safe_id }}">{{ email }}</label></td></tr>
+      {% endfor %}
     </tbody>
    </table>
    </form>
   </fieldset>
 </div>
-{% if note.permissions == 0 %}<input type="image" src="{{ MEDIA_URL }}img/private.png" title="{% trans "This note is private" %}">{% endif %}{% if note.permissions == 1 %}<input type="image" class="public" src="{{ MEDIA_URL }}img/public.png" title="{% trans "This note is public for anyone to see" %}">{% endif %}
+{% if note.permissions == 0 %}<input type="image" src="{{ MEDIA_URL }}img/private.png" title="{% trans "This note is private" %}" class="top">{% endif %}{% if note.permissions == 1 %}<input type="image" class="public top" src="{{ MEDIA_URL }}img/public.png" title="{% trans "This note is public for anyone to see" %}">{% endif %}
 <table id="content-layout" cellspacing="0" cellpadding="0">
     <tr>
         <td id="note">

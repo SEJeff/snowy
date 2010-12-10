@@ -107,8 +107,9 @@ $(document).ready(function() {
   //alert("new_id=" + new_id);
 
   // Attach click handler to checkboxes
+  // TODO: Add this handler to javascript added table rows when a new invitation is sent out
   table_rows.find("input:checkbox").click(function(element) {
-    alert("id=" + $(this).attr("value") + "; checked=" + $(this).attr("checked") );
+    alert("value=" + $(this).attr("value") + "; id=" + $(this).attr("id") + "; checked=" + $(this).attr("checked") );
     /*
     var checked = $(this).attr("checked");
     var email = 
