@@ -151,7 +151,7 @@ def accounts_preferences(request, template_name='accounts/preferences.html'):
         openid_form = RemoveUserOpenIDForm(request.POST, open_ids=open_ids)
         if openid_form.is_valid():
             if len(open_ids) == 1:
-                openid_form.errors['openid'] = [u'Cannot delete the last OpenID account']
+                openid_form.errors['openid'] = [_('Cannot delete the last OpenID account')]
             else:
                 openid_form.cleaned_data['openid'].delete()
     else:

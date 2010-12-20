@@ -108,4 +108,4 @@ class RemoveUserOpenIDForm(forms.Form):
         open_ids = kwargs.pop('open_ids')
         super(RemoveUserOpenIDForm, self).__init__(*args, **kwargs)
 
-        self.fields['openid'] = UserOpenIDChoiceField(open_ids, required=True, label='Delete OpenID account')
+        self.fields['openid'] = UserOpenIDChoiceField(open_ids, required=True, label=_('Delete OpenID account'))
