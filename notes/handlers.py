@@ -37,9 +37,7 @@ class ShareHandler(BaseHandler):
 
     def create(self, request, username, note_id, slug=None):
         """
-        When $.post() is called via jQuery. Unfortunately, HTTP PUT
-        is not well supported by some browsers and many clients  so
-        we   overload   POST   to  also  update  checkbox  changes.
+        POST updates for adding emails to the sharing list
         """
         data  = request.POST
         attrs = self.flatten_dict(data)
